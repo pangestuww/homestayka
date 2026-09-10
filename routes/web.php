@@ -1,70 +1,95 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\AuthController;
 
 
-/*
-|--------------------------------------------------------------------------
-| HOME
-|--------------------------------------------------------------------------
-*/
+// =====================================================
+// AUTH
+// =====================================================
+
+// LOGIN
+Route::get('/login', [AuthController::class, 'showLogin'])
+    ->name('login');
+
+// REGISTER
+Route::get('/register', [AuthController::class, 'showRegister'])
+    ->name('register');
+
+// PROSES LOGIN
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login.process');
+
+// PROSES REGISTER
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('register.process');
+
+
+// =====================================================
+// HOME
+// =====================================================
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
 
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
+// =====================================================
+// EXPLORE
+// =====================================================
 
-Route::get('/login', [AuthController::class, 'showLogin'])
-    ->name('login');
-
-Route::post('/login', [AuthController::class, 'login'])
-    ->name('login.process');
+Route::get('/explore', function () {
+    return view('explore');
+})->name('explore');
 
 
-Route::get('/register', [AuthController::class, 'showRegister'])
-    ->name('register');
+// =====================================================
+// PENGINAPAN / PROPERTIES
+// =====================================================
 
-Route::post('/register', [AuthController::class, 'register'])
-    ->name('register.process');
-
-
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
+Route::resource('properties', PropertyController::class);
 
 
-/*
-|--------------------------------------------------------------------------
-| PROFILE
-|--------------------------------------------------------------------------
-*/
+// =====================================================
+// PROFILE
+// =====================================================
 
 Route::middleware('auth')->group(function () {
 
+    // Profile
     Route::get('/profile', [ProfileController::class, 'index'])
         ->name('profile');
 
+    // Edit profile
     Route::get('/profile/edit', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
+    // Update profile
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
+
+    // Hapus akun
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| PROPERTIES
-|--------------------------------------------------------------------------
-*/
+// =====================================================
+// LOGOUT
+// =====================================================
 
-Route::resource('properties', PropertyController::class);
+Route::post('/logout', function () {
+
+    Auth::logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()
+        ->route('login')
+        ->with('success', 'Kamu berhasil log out');
+})->name('logout');

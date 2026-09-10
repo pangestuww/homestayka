@@ -2,16 +2,24 @@
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>Homestayka</title>
+    <title>Homestayka - Temukan Penginapan Terbaik</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         html {
@@ -19,491 +27,540 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        }
+
+        .hero {
+            background-image:
+                linear-gradient(90deg,
+                    rgba(7, 29, 58, 0.86) 0%,
+                    rgba(7, 29, 58, 0.55) 48%,
+                    rgba(7, 29, 58, 0.12) 100%),
+                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=85');
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .destination-card {
+            transition: all .3s ease;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 20px 45px rgba(15, 23, 42, .18);
+        }
+
+        .property-card {
+            transition: all .3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, .12);
         }
     </style>
-
 </head>
 
+<body class="bg-slate-50 text-slate-800">
 
-<body class="bg-white text-gray-900">
+    {{-- =====================================================
+         NAVBAR
+    ====================================================== --}}
+    <header class="absolute top-0 left-0 right-0 z-50">
 
+        <nav class="glass">
 
-    <!-- ===================================================== -->
-    <!-- NOTIFICATION -->
-    <!-- ===================================================== -->
+            <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
-    @if(session('success'))
+                <div class="h-[88px] flex items-center justify-between">
 
-    <div
-        id="successNotification"
-        class="fixed top-6 right-6 z-[9999]">
+                    {{-- LOGO --}}
+                    <a href="{{ route('home') }}"
+                        class="flex items-center gap-3 group">
 
-        <div
-            class="bg-white border border-gray-200
-                   shadow-2xl rounded-2xl
-                   px-6 py-4
-                   flex items-center gap-4
-                   min-w-[320px]">
+                        <div class="w-12 h-12 flex items-center justify-center">
 
-            <div
-                class="w-10 h-10 rounded-full
-                       bg-green-100
-                       flex items-center justify-center
-                       flex-shrink-0">
+                            <svg
+                                viewBox="0 0 64 64"
+                                class="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
 
-                <span class="text-green-600 text-xl">
-                    ✓
-                </span>
+                                <path
+                                    d="M8 29.5L32 9L56 29.5"
+                                    stroke="white"
+                                    stroke-width="4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round" />
 
-            </div>
+                                <path
+                                    d="M14 27V49C14 50.1 14.9 51 16 51H48C49.1 51 50 50.1 50 49V27"
+                                    stroke="white"
+                                    stroke-width="4"
+                                    stroke-linejoin="round" />
 
+                                <path
+                                    d="M27 51V38C27 36.9 27.9 36 29 36H35C36.1 36 37 36.9 37 38V51"
+                                    stroke="white"
+                                    stroke-width="3.5"
+                                    stroke-linejoin="round" />
 
-            <div>
+                                <path
+                                    d="M20 31H26V37H20V31Z"
+                                    fill="white" />
 
-                <p class="text-xs text-gray-400 mb-1">
-                    Berhasil
-                </p>
+                                <path
+                                    d="M38 31H44V37H38V31Z"
+                                    fill="white" />
 
-                <p class="text-gray-800">
-                    {{ session('success') }}
-                </p>
+                                <path
+                                    d="M8 54C15 49.5 21 59 29 54C37 49 43 58.5 56 52.5"
+                                    stroke="#7DD3FC"
+                                    stroke-width="3.5"
+                                    stroke-linecap="round" />
 
-            </div>
+                            </svg>
 
-        </div>
+                        </div>
 
-    </div>
+                        <span class="text-2xl text-white tracking-tight">
+                            Homestayka
+                        </span>
 
-
-    <script>
-        setTimeout(function() {
-
-            const notification =
-                document.getElementById('successNotification');
-
-            if (notification) {
-
-                notification.style.transition =
-                    'opacity 0.5s ease, transform 0.5s ease';
-
-                notification.style.opacity = '0';
-
-                notification.style.transform =
-                    'translateX(30px)';
-
-                setTimeout(function() {
-
-                    notification.remove();
-
-                }, 500);
-            }
-
-        }, 3000);
-    </script>
-
-    @endif
+                    </a>
 
 
+                    {{-- MENU DESKTOP --}}
+                    <div class="hidden lg:flex items-center gap-9 text-white">
 
-    <!-- ===================================================== -->
-    <!-- NAVBAR -->
-    <!-- ===================================================== -->
+                        <a
+                            href="{{ route('home') }}"
+                            class="relative py-2 text-blue-200">
 
-    <nav class="absolute top-0 left-0 right-0 z-50">
+                            Home
 
-        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+                            <span
+                                class="absolute left-0 right-0 -bottom-1 mx-auto h-0.5 w-8 rounded-full bg-blue-300">
+                            </span>
 
-            <div class="h-24 flex items-center justify-between">
+                        </a>
 
 
-                <!-- ================================================= -->
-                <!-- LOGO -->
-                <!-- ================================================= -->
+                        <a
+                            href="{{ route('explore') }}"
+                            class="py-2 hover:text-blue-200 transition">
 
-                <a
-                    href="{{ route('home') }}"
-                    class="flex items-center gap-3">
+                            Explore
 
-                    <div
-                        class="w-11 h-11
-                           rounded-xl
-                           overflow-hidden
-                           bg-white">
+                        </a>
 
-                        <img
-                            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=200&q=80"
-                            alt="Homestayka"
-                            class="w-full h-full object-cover">
+
+                        <a
+                            href="{{ route('properties.index') }}"
+                            class="py-2 hover:text-blue-200 transition">
+
+                            Penginapan
+
+                        </a>
+
+
+                        @auth
+
+                        <a
+                            href="{{ route('profile') }}"
+                            class="flex items-center gap-2 py-2 hover:text-blue-200 transition">
+
+                            <span
+                                class="w-9 h-9 rounded-full bg-white/20 border border-white/30 flex items-center justify-center">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="3.5">
+                                    </circle>
+
+                                    <path
+                                        d="M5.5 20c.8-3.2 3.1-5 6.5-5s5.7 1.8 6.5 5">
+                                    </path>
+
+                                </svg>
+
+                            </span>
+
+                            Profile
+
+                        </a>
+
+                        @else
+
+                        <a
+                            href="{{ route('login') }}"
+                            class="px-6 py-2.5 rounded-full border border-blue-300 text-white hover:bg-white hover:text-blue-700 transition">
+
+                            Login
+
+                        </a>
+
+
+                        <a
+                            href="{{ route('register') }}"
+                            class="px-6 py-2.5 rounded-full bg-blue-600 text-white hover:bg-blue-500 transition shadow-lg">
+
+                            Daftar
+
+                        </a>
+
+                        @endauth
 
                     </div>
 
 
-                    <span class="text-2xl text-white">
-                        Homestayka
-                    </span>
+                    {{-- MOBILE BUTTON --}}
+                    <button
+                        id="mobileMenuButton"
+                        type="button"
+                        class="lg:hidden w-11 h-11 rounded-xl border border-white/30 text-white flex items-center justify-center">
 
-                </a>
+                        <svg
+                            class="w-6 h-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8">
 
+                            <path d="M4 7h16"></path>
+                            <path d="M4 12h16"></path>
+                            <path d="M4 17h16"></path>
 
+                        </svg>
 
-                <!-- ================================================= -->
-                <!-- MENU -->
-                <!-- ================================================= -->
-
-                <div
-                    class="hidden lg:flex
-                       items-center
-                       gap-8
-                       text-white">
-
-                    <a
-                        href="{{ route('home') }}"
-                        class="hover:text-blue-200 transition">
-                        Home
-                    </a>
-
-
-                    <a
-                        href="{{ route('properties.index') }}"
-                        class="hover:text-blue-200 transition">
-                        Explore
-                    </a>
-
-
-                    <a
-                        href="#destinations"
-                        class="hover:text-blue-200 transition">
-                        Destinasi
-                    </a>
-
-
-                    <a
-                        href="#popular"
-                        class="hover:text-blue-200 transition">
-                        Penginapan
-                    </a>
-
-
-                    <a
-                        href="{{ route('properties.index') }}"
-                        class="hover:text-blue-200 transition">
-                        Pesanan
-                    </a>
+                    </button>
 
                 </div>
 
 
+                {{-- MOBILE MENU --}}
+                <div
+                    id="mobileMenu"
+                    class="hidden lg:hidden pb-5">
 
-                <!-- ================================================= -->
-                <!-- ACCOUNT -->
-                <!-- ================================================= -->
+                    <div class="rounded-2xl bg-white p-4 shadow-2xl space-y-2">
 
-                <div class="flex items-center">
+                        <a
+                            href="{{ route('home') }}"
+                            class="block px-4 py-3 rounded-xl bg-blue-50 text-blue-700">
 
-                    @auth
+                            Home
 
-                    <!-- ========================================= -->
-                    <!-- PROFILE -->
-                    <!-- ========================================= -->
+                        </a>
 
-                    <a
-                        href="{{ route('profile') }}"
-                        class="flex items-center gap-3 group">
+                        <a
+                            href="{{ route('explore') }}"
+                            class="block px-4 py-3 rounded-xl hover:bg-slate-100">
 
-                        <!-- AVATAR -->
+                            Explore
 
-                        <div
-                            class="w-12 h-12
-                                   rounded-full
-                                   bg-blue-600
-                                   border-2 border-white
-                                   flex items-center
-                                   justify-center
-                                   text-white
-                                   text-lg
-                                   group-hover:bg-blue-700
-                                   transition">
+                        </a>
 
-                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        <a
+                            href="{{ route('properties.index') }}"
+                            class="block px-4 py-3 rounded-xl hover:bg-slate-100">
 
-                        </div>
+                            Penginapan
 
+                        </a>
 
-                        <!-- NAME -->
+                        @auth
 
-                        <div class="hidden sm:block">
+                        <a
+                            href="{{ route('profile') }}"
+                            class="block px-4 py-3 rounded-xl hover:bg-slate-100">
 
-                            <p class="text-white text-sm">
-                                {{ Auth::user()->name }}
-                            </p>
+                            Profile
 
-                            <p class="text-white/60 text-xs">
-                                Profile
-                            </p>
+                        </a>
 
-                        </div>
+                        @else
 
-                    </a>
+                        <a
+                            href="{{ route('login') }}"
+                            class="block px-4 py-3 rounded-xl hover:bg-slate-100">
 
-                    @else
+                            Login
 
-                    <!-- LOGIN -->
+                        </a>
 
-                    <a
-                        href="{{ route('login') }}"
-                        class="px-5 py-3
-                               text-white
-                               rounded-xl
-                               hover:bg-white/10
-                               transition">
-                        Login
-                    </a>
+                        <a
+                            href="{{ route('register') }}"
+                            class="block px-4 py-3 rounded-xl bg-blue-600 text-white">
 
+                            Daftar
 
-                    <!-- REGISTER -->
+                        </a>
 
-                    <a
-                        href="{{ route('register') }}"
-                        class="ml-2
-                               px-5 py-3
-                               bg-white
-                               text-blue-700
-                               rounded-xl
-                               hover:bg-gray-100
-                               transition">
-                        Daftar
-                    </a>
+                        @endauth
 
-                    @endauth
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </nav>
 
-    </nav>
+    </header>
 
 
 
-    <!-- ===================================================== -->
-    <!-- HERO -->
-    <!-- ===================================================== -->
-
+    {{-- =====================================================
+         HERO
+    ====================================================== --}}
     <section
-        class="relative
-           min-h-[760px]
-           flex items-center">
+        class="hero min-h-[720px] lg:min-h-[760px] flex items-center">
 
+        <div class="max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-10 pt-28 pb-20">
 
-        <!-- BACKGROUND -->
-
-        <img
-            src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=2000&q=90"
-            alt="Homestayka"
-            class="absolute inset-0
-               w-full h-full
-               object-cover">
-
-
-        <!-- OVERLAY -->
-
-        <div
-            class="absolute inset-0
-               bg-black/45"></div>
-
-
-
-        <!-- CONTENT -->
-
-        <div
-            class="relative z-10
-               max-w-7xl
-               mx-auto
-               px-6 lg:px-10
-               w-full
-               pt-24">
-
-            <div class="max-w-4xl">
-
-
-                <!-- BADGE -->
+            <div class="max-w-3xl">
 
                 <div
-                    class="inline-flex
-                       items-center
-                       gap-2
-                       px-4 py-2
-                       rounded-full
-                       bg-white/15
-                       backdrop-blur-md
-                       text-white
-                       mb-7">
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/20 text-white text-sm backdrop-blur-md mb-6">
 
-                    <span>
-                        ✦
+                    <span
+                        class="w-2 h-2 rounded-full bg-emerald-300">
                     </span>
 
-                    <span>
-                        Temukan tempat terbaik untuk menginap
-                    </span>
+                    Penginapan pilihan di Indonesia
 
                 </div>
 
 
-
-                <!-- TITLE -->
-
                 <h1
-                    class="text-5xl
-                       md:text-6xl
-                       lg:text-7xl
-                       text-white
-                       leading-tight
-                       mb-7">
+                    class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-tight text-white tracking-tight">
 
-                    Perjalanan dimulai dari
+                    Temukan Penginapan
 
-                    <span class="text-blue-300">
-                        tempat yang tepat.
+                    <br>
+
+                    <span class="text-blue-200">
+                        Terbaik untuk Perjalananmu
                     </span>
 
                 </h1>
 
 
-
-                <!-- DESCRIPTION -->
-
                 <p
-                    class="text-xl
-                       text-white/80
-                       max-w-2xl
-                       leading-relaxed
-                       mb-10">
+                    class="mt-6 max-w-2xl text-lg sm:text-xl leading-relaxed text-white/85">
 
-                    Temukan hotel, villa, dan kost terbaik
-                    untuk perjalanan, liburan, maupun
-                    kebutuhan tinggal kamu.
+                    Hotel terbaik dengan harga terjangkau
+                    untuk pengalaman menginap yang lebih menyenangkan.
 
                 </p>
 
 
-
-                <!-- SEARCH -->
-
+                {{-- SEARCH BOX --}}
                 <form
                     action="{{ route('properties.index') }}"
                     method="GET"
-                    class="bg-white
-                       rounded-3xl
-                       p-3
-                       shadow-2xl
-                       max-w-5xl">
+                    class="mt-10 bg-white rounded-3xl p-3 sm:p-4 shadow-2xl">
 
                     <div
-                        class="grid
-                           grid-cols-1
-                           md:grid-cols-4
-                           gap-2">
+                        class="grid grid-cols-1 md:grid-cols-[1.1fr_1fr_.8fr_auto] items-stretch">
 
 
-                        <!-- LOCATION -->
-
+                        {{-- LOCATION --}}
                         <div
-                            class="px-5 py-4
-                               rounded-2xl
-                               hover:bg-gray-50
-                               transition">
+                            class="flex items-center gap-3 px-4 py-3 md:border-r border-slate-200">
 
-                            <label
-                                class="block
-                                   text-xs
-                                   text-gray-400
-                                   mb-1">
-                                Lokasi
-                            </label>
+                            <div
+                                class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path
+                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z">
+                                    </path>
+
+                                    <circle
+                                        cx="12"
+                                        cy="10"
+                                        r="2.5">
+                                    </circle>
+
+                                </svg>
+
+                            </div>
 
 
-                            <input
-                                type="text"
-                                name="city"
-                                placeholder="Mau menginap di mana?"
-                                class="w-full
-                                   outline-none
-                                   text-gray-800">
+                            <div class="min-w-0">
+
+                                <label
+                                    for="city"
+                                    class="block text-xs text-slate-500">
+
+                                    Lokasi
+
+                                </label>
+
+                                <input
+                                    id="city"
+                                    name="city"
+                                    type="text"
+                                    placeholder="Cari kota atau daerah..."
+                                    class="w-full bg-transparent outline-none text-sm text-slate-800 placeholder:text-slate-400 mt-1">
+
+                            </div>
 
                         </div>
 
 
-
-                        <!-- CHECK IN -->
-
+                        {{-- DATE --}}
                         <div
-                            class="px-5 py-4
-                               rounded-2xl
-                               hover:bg-gray-50
-                               transition">
+                            class="flex items-center gap-3 px-4 py-3 md:border-r border-slate-200">
 
-                            <label
-                                class="block
-                                   text-xs
-                                   text-gray-400
-                                   mb-1">
-                                Check-in
-                            </label>
+                            <div
+                                class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <rect
+                                        x="3.5"
+                                        y="5"
+                                        width="17"
+                                        height="16"
+                                        rx="2">
+                                    </rect>
+
+                                    <path d="M16 3v4"></path>
+                                    <path d="M8 3v4"></path>
+                                    <path d="M3.5 10h17"></path>
+
+                                </svg>
+
+                            </div>
 
 
-                            <input
-                                type="date"
-                                name="check_in"
-                                class="w-full
-                                   outline-none
-                                   text-gray-800">
+                            <div>
+
+                                <span
+                                    class="block text-xs text-slate-500">
+
+                                    Check-in / Check-out
+
+                                </span>
+
+                                <span
+                                    class="block text-sm text-slate-800 mt-1">
+
+                                    Pilih tanggal...
+
+                                </span>
+
+                            </div>
 
                         </div>
 
 
-
-                        <!-- CHECK OUT -->
-
+                        {{-- GUEST --}}
                         <div
-                            class="px-5 py-4
-                               rounded-2xl
-                               hover:bg-gray-50
-                               transition">
+                            class="flex items-center gap-3 px-4 py-3 md:border-r border-slate-200">
 
-                            <label
-                                class="block
-                                   text-xs
-                                   text-gray-400
-                                   mb-1">
-                                Check-out
-                            </label>
+                            <div
+                                class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <circle
+                                        cx="12"
+                                        cy="7"
+                                        r="3.2">
+                                    </circle>
+
+                                    <path
+                                        d="M5.5 20c.8-3.5 3-5.2 6.5-5.2s5.7 1.7 6.5 5.2">
+                                    </path>
+
+                                </svg>
+
+                            </div>
 
 
-                            <input
-                                type="date"
-                                name="check_out"
-                                class="w-full
-                                   outline-none
-                                   text-gray-800">
+                            <div>
+
+                                <span
+                                    class="block text-xs text-slate-500">
+
+                                    Tamu
+
+                                </span>
+
+                                <span
+                                    class="block text-sm text-slate-800 mt-1">
+
+                                    1 Tamu
+
+                                </span>
+
+                            </div>
 
                         </div>
 
 
-
-                        <!-- BUTTON -->
-
+                        {{-- SEARCH BUTTON --}}
                         <button
                             type="submit"
-                            class="bg-blue-600
-                               text-white
-                               rounded-2xl
-                               px-6 py-4
-                               hover:bg-blue-700
-                               transition">
+                            class="m-1 md:m-0 md:ml-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 flex items-center justify-center gap-2 transition">
+
+                            <svg
+                                class="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.9">
+
+                                <circle
+                                    cx="11"
+                                    cy="11"
+                                    r="6.5">
+                                </circle>
+
+                                <path
+                                    d="m16 16 4.5 4.5">
+                                </path>
+
+                            </svg>
+
                             Cari Penginapan
+
                         </button>
 
                     </div>
@@ -518,103 +575,55 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- CATEGORY -->
-    <!-- ===================================================== -->
-
-    <section class="py-20">
+    {{-- =====================================================
+         CATEGORY / FEATURES
+    ====================================================== --}}
+    <section class="bg-white border-b border-slate-100">
 
         <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10">
+            class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-9">
 
             <div
-                class="flex
-                   flex-col
-                   md:flex-row
-                   md:items-end
-                   md:justify-between
-                   gap-5
-                   mb-10">
-
-                <div>
-
-                    <p class="text-blue-600 mb-3">
-                        PILIHAN UNTUKMU
-                    </p>
-
-                    <h2 class="text-4xl">
-                        Cari sesuai kebutuhan
-                    </h2>
-
-                </div>
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-7 lg:gap-0">
 
 
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="text-blue-600
-                       hover:text-blue-700">
-                    Lihat semua →
-                </a>
-
-            </div>
-
-
-
-            <div
-                class="grid
-                   grid-cols-1
-                   md:grid-cols-3
-                   gap-7">
-
-
-                <!-- HOTEL -->
-
+                {{-- HOTEL --}}
                 <a
                     href="{{ route('properties.index') }}?type=hotel"
-                    class="group
-                       relative
-                       h-80
-                       rounded-3xl
-                       overflow-hidden">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=90"
-                        alt="Hotel"
-                        class="absolute inset-0
-                           w-full h-full
-                           object-cover
-                           group-hover:scale-105
-                           transition
-                           duration-500">
-
+                    class="flex items-center gap-4 lg:border-r border-slate-200 lg:pr-8">
 
                     <div
-                        class="absolute inset-0
-                           bg-gradient-to-t
-                           from-black/75
-                           to-transparent"></div>
+                        class="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                        <svg
+                            class="w-7 h-7"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8">
+
+                            <path
+                                d="M4 20V8.5A1.5 1.5 0 0 1 5.5 7h13A1.5 1.5 0 0 1 20 8.5V20">
+                            </path>
+
+                            <path d="M4 13h16"></path>
+                            <path d="M8 7V4h8v3"></path>
+                            <path d="M7 16h2"></path>
+                            <path d="M15 16h2"></path>
+
+                        </svg>
+
+                    </div>
 
 
-                    <div
-                        class="absolute
-                           bottom-0
-                           left-0
-                           right-0
-                           p-7
-                           text-white">
+                    <div>
 
-                        <p class="text-sm text-white/70 mb-2">
-                            PILIHAN POPULER
-                        </p>
-
-                        <h3 class="text-3xl mb-2">
+                        <h3 class="text-base text-slate-900">
                             Hotel
                         </h3>
 
-                        <p class="text-white/80">
-                            Hotel nyaman untuk perjalananmu.
+                        <p class="text-sm text-slate-500 mt-1">
+                            Nyaman & Strategis
                         </p>
 
                     </div>
@@ -623,111 +632,46 @@
 
 
 
-                <!-- VILLA -->
-
-                <a
-                    href="{{ route('properties.index') }}?type=villa"
-                    class="group
-                       relative
-                       h-80
-                       rounded-3xl
-                       overflow-hidden">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1000&q=90"
-                        alt="Villa"
-                        class="absolute inset-0
-                           w-full h-full
-                           object-cover
-                           group-hover:scale-105
-                           transition
-                           duration-500">
-
+                {{-- TRUST --}}
+                <div
+                    class="flex items-center gap-4 lg:pl-8">
 
                     <div
-                        class="absolute inset-0
-                           bg-gradient-to-t
-                           from-black/75
-                           to-transparent"></div>
+                        class="w-14 h-14 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+
+                        <svg
+                            class="w-7 h-7"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8">
+
+                            <path
+                                d="M12 3 20 6v5c0 5.2-3.4 8.6-8 10-4.6-1.4-8-4.8-8-10V6l8-3Z">
+                            </path>
+
+                            <path
+                                d="m8.5 12 2.2 2.2 4.8-5">
+                            </path>
+
+                        </svg>
+
+                    </div>
 
 
-                    <div
-                        class="absolute
-                           bottom-0
-                           left-0
-                           right-0
-                           p-7
-                           text-white">
+                    <div>
 
-                        <p class="text-sm text-white/70 mb-2">
-                            UNTUK LIBURAN
-                        </p>
-
-                        <h3 class="text-3xl mb-2">
-                            Villa
+                        <h3 class="text-base text-slate-900">
+                            Aman & Terpercaya
                         </h3>
 
-                        <p class="text-white/80">
-                            Tempat privat untuk waktu yang lebih tenang.
+                        <p class="text-sm text-slate-500 mt-1">
+                            Pembayaran & data terlindungi
                         </p>
 
                     </div>
 
-                </a>
-
-
-
-                <!-- KOST -->
-
-                <a
-                    href="{{ route('properties.index') }}?type=kost"
-                    class="group
-                       relative
-                       h-80
-                       rounded-3xl
-                       overflow-hidden">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=90"
-                        alt="Kost"
-                        class="absolute inset-0
-                           w-full h-full
-                           object-cover
-                           group-hover:scale-105
-                           transition
-                           duration-500">
-
-
-                    <div
-                        class="absolute inset-0
-                           bg-gradient-to-t
-                           from-black/75
-                           to-transparent"></div>
-
-
-                    <div
-                        class="absolute
-                           bottom-0
-                           left-0
-                           right-0
-                           p-7
-                           text-white">
-
-                        <p class="text-sm text-white/70 mb-2">
-                            UNTUK TINGGAL
-                        </p>
-
-                        <h3 class="text-3xl mb-2">
-                            Kost
-                        </h3>
-
-                        <p class="text-white/80">
-                            Pilihan tempat tinggal yang praktis.
-                        </p>
-
-                    </div>
-
-                </a>
+                </div>
 
             </div>
 
@@ -737,45 +681,56 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- POPULAR -->
-    <!-- ===================================================== -->
-
-    <section
-        id="popular"
-        class="py-20 bg-gray-50">
+    {{-- =====================================================
+         DESTINASI
+    ====================================================== --}}
+    <section class="py-20 lg:py-24 bg-slate-50">
 
         <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10">
+            class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+
 
             <div
-                class="flex
-                   flex-col
-                   md:flex-row
-                   md:items-end
-                   md:justify-between
-                   gap-5
-                   mb-10">
+                class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-10">
 
                 <div>
 
-                    <p class="text-blue-600 mb-3">
-                        PENGINAPAN POPULER
+                    <p class="text-blue-600 text-sm tracking-wide">
+                        DESTINASI POPULER
                     </p>
 
-                    <h2 class="text-4xl">
-                        Tempat favorit pengguna
+                    <h2
+                        class="mt-2 text-3xl sm:text-4xl text-slate-900 tracking-tight">
+
+                        Mau pergi ke mana?
+
                     </h2>
+
+                    <p class="mt-3 text-slate-500">
+                        Jelajahi berbagai pilihan penginapan di destinasi populer Indonesia.
+                    </p>
 
                 </div>
 
 
                 <a
-                    href="{{ route('properties.index') }}"
-                    class="text-blue-600">
-                    Lihat semua →
+                    href="{{ route('explore') }}"
+                    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition">
+
+                    Lihat peta
+
+                    <svg
+                        class="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8">
+
+                        <path d="M5 12h14"></path>
+                        <path d="M13 6l6 6-6 6"></path>
+
+                    </svg>
+
                 </a>
 
             </div>
@@ -783,452 +738,232 @@
 
 
             <div
-                class="grid
-                   grid-cols-1
-                   md:grid-cols-2
-                   lg:grid-cols-3
-                   gap-7">
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
 
-                <!-- CARD 1 -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       overflow-hidden
-                       border border-gray-100
-                       hover:shadow-xl
-                       transition
-                       group">
-
-                    <div class="h-64 overflow-hidden">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=90"
-                            alt="Hotel"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
-                    </div>
-
-
-                    <div class="p-6">
-
-                        <div
-                            class="flex
-                               justify-between
-                               items-center
-                               mb-3">
-
-                            <span class="text-sm text-blue-600">
-                                Hotel
-                            </span>
-
-                            <span class="text-sm">
-                                ★ 4.8
-                            </span>
-
-                        </div>
-
-
-                        <h3 class="text-xl mb-2">
-                            Modern City Hotel
-                        </h3>
-
-
-                        <p class="text-gray-500 text-sm mb-5">
-                            Jakarta
-                        </p>
-
-
-                        <div
-                            class="flex
-                               items-end
-                               justify-between">
-
-                            <div>
-
-                                <span class="text-xl">
-                                    Rp450.000
-                                </span>
-
-                                <span class="text-gray-400 text-sm">
-                                    / malam
-                                </span>
-
-                            </div>
-
-
-                            <span class="text-blue-600">
-                                →
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-
-
-                <!-- CARD 2 -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       overflow-hidden
-                       border border-gray-100
-                       hover:shadow-xl
-                       transition
-                       group">
-
-                    <div class="h-64 overflow-hidden">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=90"
-                            alt="Villa"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
-                    </div>
-
-
-                    <div class="p-6">
-
-                        <div
-                            class="flex
-                               justify-between
-                               items-center
-                               mb-3">
-
-                            <span class="text-sm text-blue-600">
-                                Villa
-                            </span>
-
-                            <span class="text-sm">
-                                ★ 4.9
-                            </span>
-
-                        </div>
-
-
-                        <h3 class="text-xl mb-2">
-                            Tropical Private Villa
-                        </h3>
-
-
-                        <p class="text-gray-500 text-sm mb-5">
-                            Bali
-                        </p>
-
-
-                        <div
-                            class="flex
-                               items-end
-                               justify-between">
-
-                            <div>
-
-                                <span class="text-xl">
-                                    Rp850.000
-                                </span>
-
-                                <span class="text-gray-400 text-sm">
-                                    / malam
-                                </span>
-
-                            </div>
-
-
-                            <span class="text-blue-600">
-                                →
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-
-
-                <!-- CARD 3 -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       overflow-hidden
-                       border border-gray-100
-                       hover:shadow-xl
-                       transition
-                       group">
-
-                    <div class="h-64 overflow-hidden">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1000&q=90"
-                            alt="Kost"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
-                    </div>
-
-
-                    <div class="p-6">
-
-                        <div
-                            class="flex
-                               justify-between
-                               items-center
-                               mb-3">
-
-                            <span class="text-sm text-blue-600">
-                                Kost
-                            </span>
-
-                            <span class="text-sm">
-                                ★ 4.7
-                            </span>
-
-                        </div>
-
-
-                        <h3 class="text-xl mb-2">
-                            Cozy Kost Residence
-                        </h3>
-
-
-                        <p class="text-gray-500 text-sm mb-5">
-                            Bandung
-                        </p>
-
-
-                        <div
-                            class="flex
-                               items-end
-                               justify-between">
-
-                            <div>
-
-                                <span class="text-xl">
-                                    Rp1.200.000
-                                </span>
-
-                                <span class="text-gray-400 text-sm">
-                                    / bulan
-                                </span>
-
-                            </div>
-
-
-                            <span class="text-blue-600">
-                                →
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ===================================================== -->
-    <!-- DESTINATIONS -->
-    <!-- ===================================================== -->
-
-    <section
-        id="destinations"
-        class="py-20">
-
-        <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10">
-
-            <div class="mb-10">
-
-                <p class="text-blue-600 mb-3">
-                    DESTINASI
-                </p>
-
-                <h2 class="text-4xl">
-                    Mau pergi ke mana?
-                </h2>
-
-            </div>
-
-
-
-            <div
-                class="grid
-                   grid-cols-1
-                   sm:grid-cols-2
-                   lg:grid-cols-4
-                   gap-6">
-
-
-                <!-- BALI -->
-
+                {{-- BALI --}}
                 <a
                     href="{{ route('properties.index') }}?city=Bali"
-                    class="group">
+                    class="destination-card relative h-72 rounded-3xl overflow-hidden group">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=85"
+                        alt="Bali"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
 
                     <div
-                        class="h-80
-                           rounded-3xl
-                           overflow-hidden
-                           mb-4">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=90"
-                            alt="Bali"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
+                        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/10 to-transparent">
                     </div>
 
+                    <div
+                        class="absolute left-5 right-5 bottom-5 text-white">
 
-                    <h3 class="text-xl">
-                        Bali
-                    </h3>
+                        <div
+                            class="flex items-end justify-between gap-3">
 
+                            <div>
 
-                    <p class="text-gray-500 mt-1">
-                        Pulau Dewata
-                    </p>
+                                <h3 class="text-2xl">
+                                    Bali
+                                </h3>
+
+                                <p class="text-sm text-white/80 mt-1">
+                                    Hotel
+                                </p>
+
+                            </div>
+
+                            <span
+                                class="w-10 h-10 rounded-full border border-white/40 bg-white/10 backdrop-blur flex items-center justify-center">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path d="M5 12h14"></path>
+                                    <path d="M13 6l6 6-6 6"></path>
+
+                                </svg>
+
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </a>
 
 
 
-                <!-- BANDUNG -->
-
+                {{-- BANDUNG --}}
                 <a
                     href="{{ route('properties.index') }}?city=Bandung"
-                    class="group">
+                    class="destination-card relative h-72 rounded-3xl overflow-hidden group">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=85"
+                        alt="Bandung"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
 
                     <div
-                        class="h-80
-                           rounded-3xl
-                           overflow-hidden
-                           mb-4">
-
-                        <img
-                            src="https://awsimages.detik.net.id/community/media/visual/2022/07/20/kota-bandung_43.jpeg?w=1200"
-                            alt="Bandung"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
+                        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/10 to-transparent">
                     </div>
 
+                    <div
+                        class="absolute left-5 right-5 bottom-5 text-white">
 
-                    <h3 class="text-xl">
-                        Bandung
-                    </h3>
+                        <div
+                            class="flex items-end justify-between gap-3">
 
+                            <div>
 
-                    <p class="text-gray-500 mt-1">
-                        Kota Kembang
-                    </p>
+                                <h3 class="text-2xl">
+                                    Bandung
+                                </h3>
+
+                                <p class="text-sm text-white/80 mt-1">
+                                    Hotel
+                                </p>
+
+                            </div>
+
+                            <span
+                                class="w-10 h-10 rounded-full border border-white/40 bg-white/10 backdrop-blur flex items-center justify-center">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path d="M5 12h14"></path>
+                                    <path d="M13 6l6 6-6 6"></path>
+
+                                </svg>
+
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </a>
 
 
 
-                <!-- YOGYAKARTA -->
-
+                {{-- YOGYAKARTA --}}
                 <a
                     href="{{ route('properties.index') }}?city=Yogyakarta"
-                    class="group">
+                    class="destination-card relative h-72 rounded-3xl overflow-hidden group">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=900&q=85"
+                        alt="Yogyakarta"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
 
                     <div
-                        class="h-80
-                           rounded-3xl
-                           overflow-hidden
-                           mb-4">
-
-                        <img
-                            src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1000&q=90"
-                            alt="Yogyakarta"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
+                        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/10 to-transparent">
                     </div>
 
+                    <div
+                        class="absolute left-5 right-5 bottom-5 text-white">
 
-                    <h3 class="text-xl">
-                        Yogyakarta
-                    </h3>
+                        <div
+                            class="flex items-end justify-between gap-3">
 
+                            <div>
 
-                    <p class="text-gray-500 mt-1">
-                        Kota Budaya
-                    </p>
+                                <h3 class="text-2xl">
+                                    Yogyakarta
+                                </h3>
+
+                                <p class="text-sm text-white/80 mt-1">
+                                    Hotel
+                                </p>
+
+                            </div>
+
+                            <span
+                                class="w-10 h-10 rounded-full border border-white/40 bg-white/10 backdrop-blur flex items-center justify-center">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path d="M5 12h14"></path>
+                                    <path d="M13 6l6 6-6 6"></path>
+
+                                </svg>
+
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </a>
 
 
 
-                <!-- JAKARTA -->
-
+                {{-- JAKARTA --}}
                 <a
                     href="{{ route('properties.index') }}?city=Jakarta"
-                    class="group">
+                    class="destination-card relative h-72 rounded-3xl overflow-hidden group">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1555899434-94d1368aa7af?auto=format&fit=crop&w=900&q=85"
+                        alt="Jakarta"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105">
 
                     <div
-                        class="h-80
-                           rounded-3xl
-                           overflow-hidden
-                           mb-4">
-
-                        <img
-                            src="https://cdn.visiteliti.com/article/2022-06/16/q83HAOpsQWwL7h5QqyU6_1655361530.jpeg"
-                            alt="Jakarta"
-                            class="w-full h-full
-                               object-cover
-                               group-hover:scale-105
-                               transition
-                               duration-500">
-
+                        class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/10 to-transparent">
                     </div>
 
+                    <div
+                        class="absolute left-5 right-5 bottom-5 text-white">
 
-                    <h3 class="text-xl">
-                        Jakarta
-                    </h3>
+                        <div
+                            class="flex items-end justify-between gap-3">
 
+                            <div>
 
-                    <p class="text-gray-500 mt-1">
-                        Ibu Kota
-                    </p>
+                                <h3 class="text-2xl">
+                                    Jakarta
+                                </h3>
+
+                                <p class="text-sm text-white/80 mt-1">
+                                    Hotel
+                                </p>
+
+                            </div>
+
+                            <span
+                                class="w-10 h-10 rounded-full border border-white/40 bg-white/10 backdrop-blur flex items-center justify-center">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path d="M5 12h14"></path>
+                                    <path d="M13 6l6 6-6 6"></path>
+
+                                </svg>
+
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </a>
 
@@ -1240,232 +975,258 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- WHY HOMESTAYKA -->
-    <!-- ===================================================== -->
-
-    <section class="py-20 bg-gray-50">
-
-        <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10">
-
-            <div class="max-w-2xl mb-12">
-
-                <p class="text-blue-600 mb-3">
-                    KENAPA HOMESTAYKA?
-                </p>
-
-                <h2 class="text-4xl mb-4">
-                    Semua yang kamu butuhkan untuk menginap.
-                </h2>
-
-                <p class="text-gray-500 text-lg">
-                    Kami membuat proses mencari dan memesan
-                    tempat menginap menjadi lebih mudah.
-                </p>
-
-            </div>
-
-
-
-            <div
-                class="grid
-                   grid-cols-1
-                   md:grid-cols-3
-                   gap-7">
-
-
-                <!-- MAPS -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       p-8
-                       border border-gray-100
-                       hover:shadow-lg
-                       transition">
-
-                    <div
-                        class="w-14 h-14
-                           rounded-2xl
-                           bg-blue-50
-                           flex items-center
-                           justify-center
-                           mb-6">
-
-                        <span class="text-blue-600 text-2xl">
-                            ⌖
-                        </span>
-
-                    </div>
-
-
-                    <h3 class="text-xl mb-3">
-                        Explore dengan Maps
-                    </h3>
-
-
-                    <p class="text-gray-500">
-                        Cari penginapan berdasarkan lokasi
-                        yang kamu inginkan.
-                    </p>
-
-                </a>
-
-
-
-                <!-- BOOKING -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       p-8
-                       border border-gray-100
-                       hover:shadow-lg
-                       transition">
-
-                    <div
-                        class="w-14 h-14
-                           rounded-2xl
-                           bg-green-50
-                           flex items-center
-                           justify-center
-                           mb-6">
-
-                        <span class="text-green-600 text-2xl">
-                            □
-                        </span>
-
-                    </div>
-
-
-                    <h3 class="text-xl mb-3">
-                        Booking Mudah
-                    </h3>
-
-
-                    <p class="text-gray-500">
-                        Pilih tempat, tentukan tanggal,
-                        lalu lakukan booking.
-                    </p>
-
-                </a>
-
-
-
-                <!-- REVIEW -->
-
-                <a
-                    href="{{ route('properties.index') }}"
-                    class="bg-white
-                       rounded-3xl
-                       p-8
-                       border border-gray-100
-                       hover:shadow-lg
-                       transition">
-
-                    <div
-                        class="w-14 h-14
-                           rounded-2xl
-                           bg-yellow-50
-                           flex items-center
-                           justify-center
-                           mb-6">
-
-                        <span class="text-yellow-500 text-2xl">
-                            ★
-                        </span>
-
-                    </div>
-
-
-                    <h3 class="text-xl mb-3">
-                        Review & Rating
-                    </h3>
-
-
-                    <p class="text-gray-500">
-                        Lihat pengalaman pengguna lain
-                        sebelum memilih penginapan.
-                    </p>
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ===================================================== -->
-    <!-- CTA -->
-    <!-- ===================================================== -->
-
-    <section class="py-20">
+    {{-- =====================================================
+         WHY HOMESTAYKA
+    ====================================================== --}}
+    <section class="py-20 lg:py-24 bg-white">
 
         <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10">
+            class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
             <div
-                class="relative
-                   rounded-[2rem]
-                   overflow-hidden
-                   min-h-[400px]
-                   flex items-center">
-
-                <img
-                    src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1800&q=90"
-                    alt="Homestayka"
-                    class="absolute inset-0
-                       w-full h-full
-                       object-cover">
+                class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
 
-                <div
-                    class="absolute inset-0
-                       bg-black/55"></div>
+                {{-- TEXT --}}
+                <div>
 
-
-                <div
-                    class="relative z-10
-                       p-10 md:p-16
-                       max-w-2xl
-                       text-white">
-
-                    <p class="text-blue-300 mb-4">
-                        HOMESTAYKA
+                    <p class="text-blue-600 text-sm tracking-wide">
+                        KENAPA HOMESTAYKA?
                     </p>
 
+                    <h2
+                        class="mt-3 text-3xl sm:text-4xl text-slate-900 tracking-tight">
 
-                    <h2 class="text-4xl md:text-5xl mb-6">
-                        Siap menemukan tempat menginapmu?
+                        Semua kebutuhan menginap,
+
+                        <span class="text-blue-600">
+                            dalam satu tempat.
+                        </span>
+
                     </h2>
 
+                    <p
+                        class="mt-5 text-slate-500 leading-relaxed max-w-xl">
 
-                    <p class="text-white/75 text-lg mb-8">
-                        Jelajahi berbagai hotel, villa,
-                        dan kost yang tersedia.
+                        Homestayka membantu kamu menemukan penginapan yang sesuai,
+                        melihat lokasinya di peta, melakukan pemesanan,
+                        dan mengelola perjalanan dengan lebih mudah.
+
                     </p>
+
+
+                    <div class="mt-9 space-y-5">
+
+
+                        {{-- FEATURE 1 --}}
+                        <div class="flex gap-4">
+
+                            <div
+                                class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="8">
+                                    </circle>
+
+                                    <path
+                                        d="m8.5 12 2.2 2.2 4.8-5">
+                                    </path>
+
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="text-slate-900">
+                                    Pilihan penginapan beragam
+                                </h3>
+
+                                <p class="text-sm text-slate-500 mt-1">
+                                    Hotel dari berbagai daerah.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- FEATURE 2 --}}
+                        <div class="flex gap-4">
+
+                            <div
+                                class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path
+                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z">
+                                    </path>
+
+                                    <circle
+                                        cx="12"
+                                        cy="10"
+                                        r="2.5">
+                                    </circle>
+
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="text-slate-900">
+                                    Lokasi jelas di peta
+                                </h3>
+
+                                <p class="text-sm text-slate-500 mt-1">
+                                    Temukan penginapan berdasarkan lokasi.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- FEATURE 3 --}}
+                        <div class="flex gap-4">
+
+                            <div
+                                class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+
+                                <svg
+                                    class="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <rect
+                                        x="4"
+                                        y="5"
+                                        width="16"
+                                        height="15"
+                                        rx="2">
+                                    </rect>
+
+                                    <path d="M8 3v4"></path>
+                                    <path d="M16 3v4"></path>
+                                    <path d="M4 10h16"></path>
+
+                                </svg>
+
+                            </div>
+
+                            <div>
+
+                                <h3 class="text-slate-900">
+                                    Pemesanan lebih praktis
+                                </h3>
+
+                                <p class="text-sm text-slate-500 mt-1">
+                                    Kelola semua reservasi dari satu tempat.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
 
                     <a
                         href="{{ route('properties.index') }}"
-                        class="inline-block
-                           px-7 py-4
-                           rounded-xl
-                           bg-blue-600
-                           hover:bg-blue-700
-                           transition">
-                        Mulai Explore
+                        class="inline-flex items-center gap-2 mt-9 px-6 py-3.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition">
+
+                        Jelajahi Penginapan
+
+                        <svg
+                            class="w-5 h-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8">
+
+                            <path d="M5 12h14"></path>
+                            <path d="M13 6l6 6-6 6"></path>
+
+                        </svg>
+
                     </a>
+
+                </div>
+
+
+
+                {{-- IMAGE --}}
+                <div class="relative">
+
+                    <div
+                        class="absolute -top-8 -left-8 w-40 h-40 rounded-full bg-blue-100 blur-3xl opacity-70">
+                    </div>
+
+                    <div
+                        class="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-sky-100 blur-3xl opacity-70">
+                    </div>
+
+
+                    <div
+                        class="relative rounded-[2rem] overflow-hidden shadow-2xl">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85"
+                            alt="Penginapan Homestayka"
+                            class="w-full h-[500px] object-cover">
+
+                    </div>
+
+
+                    <div
+                        class="absolute -bottom-6 left-5 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-4">
+
+                        <div
+                            class="w-11 h-11 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+
+                            <svg
+                                class="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8">
+
+                                <path d="m5 12 4 4L19 6"></path>
+
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-sm text-slate-500">
+                                Pengalaman mudah
+                            </p>
+
+                            <p class="text-slate-900">
+                                Cari · Pilih · Pesan
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -1477,83 +1238,306 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- FOOTER -->
-    <!-- ===================================================== -->
-
-    <footer class="bg-gray-950 text-white">
+    {{-- =====================================================
+         MAP CTA
+    ====================================================== --}}
+    <section class="py-20 bg-slate-950">
 
         <div
-            class="max-w-7xl
-               mx-auto
-               px-6 lg:px-10
-               py-14">
+            class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
 
             <div
-                class="grid
-                   grid-cols-1
-                   md:grid-cols-4
-                   gap-10">
+                class="rounded-[2rem] overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900">
+
+                <div
+                    class="grid lg:grid-cols-2 items-center">
 
 
-                <!-- BRAND -->
+                    <div class="p-8 sm:p-12 lg:p-16">
 
-                <div class="md:col-span-2">
+                        <p class="text-blue-200 text-sm tracking-wide">
+                            EXPLORE DENGAN PETA
+                        </p>
+
+                        <h2
+                            class="mt-3 text-3xl sm:text-4xl text-white tracking-tight">
+
+                            Cari penginapan berdasarkan lokasi.
+
+                        </h2>
+
+                        <p
+                            class="mt-5 text-blue-100/80 leading-relaxed max-w-xl">
+
+                            Gunakan peta interaktif untuk melihat berbagai
+                            penginapan yang tersedia dan menentukan lokasi
+                            yang paling cocok untukmu.
+
+                        </p>
+
+
+                        <a
+                            href="{{ route('explore') }}"
+                            class="inline-flex items-center gap-2 mt-8 px-6 py-3.5 rounded-xl bg-white text-blue-700 hover:bg-blue-50 transition">
+
+                            Buka Explore Maps
+
+                            <svg
+                                class="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8">
+
+                                <path d="M5 12h14"></path>
+                                <path d="M13 6l6 6-6 6"></path>
+
+                            </svg>
+
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="relative h-[330px] overflow-hidden">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1524666041070-9cff5b4e5b0d?auto=format&fit=crop&w=1200&q=85"
+                            alt="Explore map"
+                            class="absolute inset-0 w-full h-full object-cover opacity-70">
+
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-900/20 to-transparent">
+                        </div>
+
+
+                        <div
+                            class="absolute inset-0 flex items-center justify-center">
+
+                            <div
+                                class="w-16 h-16 rounded-full bg-white shadow-2xl text-blue-600 flex items-center justify-center">
+
+                                <svg
+                                    class="w-7 h-7"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8">
+
+                                    <path
+                                        d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z">
+                                    </path>
+
+                                    <circle
+                                        cx="12"
+                                        cy="10"
+                                        r="2.5">
+                                    </circle>
+
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {{-- =====================================================
+         FINAL CTA
+    ====================================================== --}}
+    <section class="py-20 bg-white">
+
+        <div
+            class="max-w-5xl mx-auto px-5 sm:px-8 text-center">
+
+            <p class="text-blue-600 text-sm tracking-wide">
+                SIAP UNTUK PERJALANANMU?
+            </p>
+
+
+            <h2
+                class="mt-3 text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight">
+
+                Temukan tempat menginap
+
+                <span class="text-blue-600">
+                    yang pas.
+                </span>
+
+            </h2>
+
+
+            <p
+                class="mt-5 text-slate-500 max-w-2xl mx-auto leading-relaxed">
+
+                Mulai cari penginapan favoritmu dan buat perjalanan
+                jadi lebih nyaman.
+
+            </p>
+
+
+            <div
+                class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+
+                <a
+                    href="{{ route('properties.index') }}"
+                    class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition">
+
+                    Lihat Penginapan
+
+                </a>
+
+
+                @guest
+
+                <a
+                    href="{{ route('register') }}"
+                    class="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition">
+
+                    Buat Akun
+
+                </a>
+
+                @endguest
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {{-- =====================================================
+         FOOTER
+    ====================================================== --}}
+    <footer class="bg-slate-950 text-slate-300">
+
+        <div
+            class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-14">
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+
+                {{-- BRAND --}}
+                <div class="lg:col-span-2">
 
                     <a
                         href="{{ route('home') }}"
-                        class="text-2xl">
-                        Homestayka
+                        class="inline-flex items-center gap-3">
+
+                        <div class="w-11 h-11">
+
+                            <svg
+                                viewBox="0 0 64 64"
+                                class="w-full h-full"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+
+                                <path
+                                    d="M8 29.5L32 9L56 29.5"
+                                    stroke="white"
+                                    stroke-width="4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round" />
+
+                                <path
+                                    d="M14 27V49C14 50.1 14.9 51 16 51H48C49.1 51 50 50.1 50 49V27"
+                                    stroke="white"
+                                    stroke-width="4"
+                                    stroke-linejoin="round" />
+
+                                <path
+                                    d="M27 51V38C27 36.9 27.9 36 29 36H35C36.1 36 37 36.9 37 38V51"
+                                    stroke="white"
+                                    stroke-width="3.5"
+                                    stroke-linejoin="round" />
+
+                                <path
+                                    d="M20 31H26V37H20V31Z"
+                                    fill="white" />
+
+                                <path
+                                    d="M38 31H44V37H38V31Z"
+                                    fill="white" />
+
+                                <path
+                                    d="M8 54C15 49.5 21 59 29 54C37 49 43 58.5 56 52.5"
+                                    stroke="#7DD3FC"
+                                    stroke-width="3.5"
+                                    stroke-linecap="round" />
+
+                            </svg>
+
+                        </div>
+
+
+                        <span class="text-2xl text-white">
+                            Homestayka
+                        </span>
+
                     </a>
 
 
                     <p
-                        class="text-gray-500
-                           mt-4
-                           max-w-md
-                           leading-relaxed">
-                        Platform pencarian dan pemesanan hotel,
-                        villa, dan kost untuk kebutuhan perjalanan
-                        dan tempat tinggal kamu.
+                        class="mt-5 text-slate-400 leading-relaxed max-w-md">
+
+                        Platform pencarian dan pemesanan hotel
+                        untuk membuat perjalananmu lebih nyaman.
+
                     </p>
 
                 </div>
 
 
 
-                <!-- NAVIGATION -->
-
+                {{-- NAVIGATION --}}
                 <div>
 
-                    <h3 class="mb-5">
+                    <h3 class="text-white mb-5">
                         Navigasi
                     </h3>
 
 
                     <div
-                        class="flex
-                           flex-col
-                           gap-3
-                           text-gray-500">
+                        class="flex flex-col gap-3 text-slate-400">
 
                         <a
                             href="{{ route('home') }}"
                             class="hover:text-white transition">
+
                             Home
+
+                        </a>
+
+
+                        <a
+                            href="{{ route('explore') }}"
+                            class="hover:text-white transition">
+
+                            Explore
+
                         </a>
 
 
                         <a
                             href="{{ route('properties.index') }}"
                             class="hover:text-white transition">
-                            Explore
-                        </a>
 
+                            Penginapan
 
-                        <a
-                            href="#destinations"
-                            class="hover:text-white transition">
-                            Destinasi
                         </a>
 
 
@@ -1562,7 +1546,9 @@
                         <a
                             href="{{ route('profile') }}"
                             class="hover:text-white transition">
+
                             Profile
+
                         </a>
 
                         @else
@@ -1570,7 +1556,9 @@
                         <a
                             href="{{ route('login') }}"
                             class="hover:text-white transition">
+
                             Login
+
                         </a>
 
                         @endauth
@@ -1581,39 +1569,23 @@
 
 
 
-                <!-- PENGINAPAN -->
-
+                {{-- PENGINAPAN --}}
                 <div>
 
-                    <h3 class="mb-5">
+                    <h3 class="text-white mb-5">
                         Penginapan
                     </h3>
 
 
                     <div
-                        class="flex
-                           flex-col
-                           gap-3
-                           text-gray-500">
+                        class="flex flex-col gap-3 text-slate-400">
 
                         <a
                             href="{{ route('properties.index') }}?type=hotel"
                             class="hover:text-white transition">
+
                             Hotel
-                        </a>
 
-
-                        <a
-                            href="{{ route('properties.index') }}?type=villa"
-                            class="hover:text-white transition">
-                            Villa
-                        </a>
-
-
-                        <a
-                            href="{{ route('properties.index') }}?type=kost"
-                            class="hover:text-white transition">
-                            Kost
                         </a>
 
                     </div>
@@ -1623,51 +1595,17 @@
             </div>
 
 
-
-            <!-- BOTTOM -->
-
+            {{-- COPYRIGHT --}}
             <div
-                class="border-t
-                   border-white/10
-                   mt-12
-                   pt-7">
+                class="border-t border-white/10 mt-12 pt-7 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-500">
 
-                <div
-                    class="flex
-                       flex-col
-                       md:flex-row
-                       md:items-center
-                       md:justify-between
-                       gap-4">
+                <p>
+                    © {{ date('Y') }} Homestayka. All rights reserved.
+                </p>
 
-                    <p class="text-gray-600 text-sm">
-                        © {{ date('Y') }} Homestayka.
-                        All rights reserved.
-                    </p>
-
-
-                    @auth
-
-                    <form
-                        action="{{ route('logout') }}"
-                        method="POST">
-
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="text-gray-500
-                                   hover:text-white
-                                   transition
-                                   text-sm">
-                            Logout
-                        </button>
-
-                    </form>
-
-                    @endauth
-
-                </div>
+                <p>
+                    Temukan tempat terbaik untuk perjalananmu.
+                </p>
 
             </div>
 
@@ -1675,6 +1613,29 @@
 
     </footer>
 
+
+
+    {{-- =====================================================
+        MOBILE MENU SCRIPT
+    ====================================================== --}}
+    <script>
+        const mobileMenuButton =
+            document.getElementById('mobileMenuButton');
+
+        const mobileMenu =
+            document.getElementById('mobileMenu');
+
+
+        if (mobileMenuButton && mobileMenu) {
+
+            mobileMenuButton.addEventListener('click', function() {
+
+                mobileMenu.classList.toggle('hidden');
+
+            });
+
+        }
+    </script>
 
 </body>
 

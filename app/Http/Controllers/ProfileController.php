@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,7 @@ class ProfileController extends Controller
             ($filledFields / $totalFields) * 100
         );
 
-        $profileComplete = $profilePercentage === 100;
+        $profileComplete = $profilePercentage >= 100;
 
         return view('profile', compact(
             'user',
@@ -109,7 +110,7 @@ class ProfileController extends Controller
 
         ]);
 
-        $user = \App\Models\User::findOrFail($user->id);
+        $user = User::findOrFail($user->id);
 
         $user->name = $request->name;
         $user->email = $request->email;
@@ -120,9 +121,35 @@ class ProfileController extends Controller
 
         $user->save();
 
-
         return redirect()
             ->route('profile')
             ->with('success', 'Profil berhasil diperbarui.');
+    }
+
+
+    // =====================================================
+    // DELETE ACCOUNT
+    // =====================================================
+
+    public function destroy(Request $request)
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        $user = User::findOrFail($user->id);
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()
+            ->route('login')
+            ->with('success', 'Akun berhasil dihapus.');
     }
 }
